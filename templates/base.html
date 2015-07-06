@@ -59,7 +59,7 @@
 					<div class="list-group">
 						<a class="list-group-item active" href="{% url 'index' %}">Home</a>
 						<a class="list-group-item" href="{% url 'create_person' %}">Kwenu</a>
-						<a class="list-group-item" href="#">Kuko Activie</a>
+						<a class="list-group-item" href="{% url 'update_person' request.user.id%}">Kuko Activie</a>
 					</div>
 				</div>				
 			</div>

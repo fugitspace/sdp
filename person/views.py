@@ -13,6 +13,8 @@ from django.views.generic.detail import SingleObjectMixin
 from django.utils.decorators import method_decorator
 
 
+from person.models import Person
+
 # Create your views here.
 class LoginRequiredMixin(object):
     @method_decorator(login_required)
@@ -21,13 +23,23 @@ class LoginRequiredMixin(object):
         return super().dispatch(request, *args, **kwargs)
 
     
-class IndexView(TemplateView):
+class IndexView(ListView):
+    model = Person
     template_name = 'person/index.html'
+    context_object_name = 'person_list'
     
 class PersonMixin(object):
-    pass
+    fields = ('first_name', 'surname', 'residence')
+
+    @property
+    def success_msg(self):
+        return NotImplemented
+
     
-class PersonCreateView(TemplateView):
+class PersonCreateView(PersonMixin, CreateView):
+    model = Person    
+    success_msg = 'Person successfully added!'
+    success_url = '/patient/'
     template_name = 'person/create_person.html'
     
     

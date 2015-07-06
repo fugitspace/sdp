@@ -6,4 +6,13 @@ SDP::Home Page Here. Just fool around
 
 {% block content %}
 <p>Home content goes here please</p>
+<ul>
+	{% for person in person_list %}
+	<li>{{ person.first_name }} <span>{{ person.surname }}</span>
+		<br />{{ person.home_village }}
+	</li>
+	
+	{% endfor %}
+</ul>
+
 {% endblock content %}

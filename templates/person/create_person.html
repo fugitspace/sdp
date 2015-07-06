@@ -5,5 +5,9 @@ SDP::Create Person
 {% endblock title %}
 
 {% block content %}
-<p>Content to create goes here</p>
+<form class="form-horizontal" method="POST" action="{% url 'create_person' %}">
+	{% csrf_token %}
+	{{ form.as_p }}
+	<input type="submit" value="Create" />
+</form>
 {% endblock content %}
