@@ -10,6 +10,8 @@ class CreateUpdate(models.Model):
     class Meta:
         abstract = True
 
+    
+
 class Gender(CreateUpdate):
     name = models.CharField(verbose_name = "Sex", max_length = 255)
 
@@ -62,6 +64,8 @@ class PersonContacts(CreateUpdate):
     residence = models.CharField(max_length=255, blank=True)
     person = models.ForeignKey(Person)
 
+    class Meta:
+        verbose_name='person contact'
     
 class PersonVitals(CreateUpdate):
     body_temperature = models.FloatField(blank=True, help_text="Temperature in Degrees Celcius")
@@ -70,4 +74,4 @@ class PersonVitals(CreateUpdate):
     person = models.ForeignKey(Person)
 
     class Meta:
-        verbose_name = 'vitals'
+        verbose_name = 'vital'
