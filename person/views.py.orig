@@ -72,10 +72,17 @@ class PersonDetailView(ListView):
         context = super(PersonDetailView, self).get_context_data(**kwargs)
         context['person'] = self.object
         models = {
+<<<<<<< HEAD
                 'vitals':PersonVitals,
                 'demographic':PersonDemographic,                
                 'contacts':PersonContacts,
                 'nextofkin':PersonGuardian
+=======
+                'demographic':PersonDemographic,
+                'nextofkin':PersonGuardian,
+                'vitals':PersonVitals,
+                'contacts':PersonContacts,                
+>>>>>>> 3cae46e3b7c8f59701014d047ef691f8557df5b6
             }
         for key, model in models.items():
             person_object = ''
@@ -133,6 +140,8 @@ class PersonContactsUpdate(PersonMixin, UpdateView):
     model = PersonContacts
     template_name = 'person/contacts_update.html'
     success_url = '/patient/'
+    
+    
 class PersonDemographicCreate(ProfileMixin, View):
     form = PersonDemographicForm
     template = 'person/demographic_create.html'
