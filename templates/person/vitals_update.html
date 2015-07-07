@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% load bootstrap3 %}
+
+{% block title %}
+SDP::Vitals
+{% endblock title %}
+
+{% block content %}
+<form class="form-horizontal" method="POST" action="{% url 'update_vitals' object.id %}">
+	{% csrf_token %}
+	{% bootstrap_form form %}
+	{% buttons %}
+	<button type="submit" class="btn btn-primary">
+		Submit
+	</button>
+	{% endbuttons %}
+</form>
+{% endblock content %}

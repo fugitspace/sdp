@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% load bootstrap3 %}
+
+{% block title %}
+SDP::Vitals
+{% endblock title %}
+
+{% block content %}
+<strong>{{person}}</strong>
+<form class="form-horizontal" method="POST" action="{% url 'create_guardian' person.id %}">
+	{% csrf_token %}
+	{% bootstrap_form form %}
+	{% buttons %}
+	<button type="submit" class="btn btn-primary">
+		Submit
+	</button>
+	{% endbuttons %}
+</form>
+{% endblock content %}

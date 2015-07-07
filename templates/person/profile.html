@@ -12,40 +12,49 @@ SDP :: Sauver Du Papier
 	<div class="panel-heading"><strong> {{person}} </strong></div>
 	<div class="panel-body">
 		<div class="list-group">
-			<li class="list-group-item">				
-				<a  href="{% url 'profile_section' person.id %}?section=vitals">Vitals</a>			
+			<li class="list-group-item">								
 				{% if vitals %}
+				<a  href="{% url 'update_vitals' vitals.id %}">Vitals</a>
 				<br />				
-				{{ vitals.body_temparature }}<br />
+				{{ vitals.body_temperature }}<br />
 				{{ vitals.weight }}<br />
 				{{ vitals.blood_pressure }}
+				{% else %}
+				<a  href="{% url 'create_vitals' person.id %}">Vitals</a>
 				{% endif %}
+				
 			</li>
-			<li class="list-group-item">				
-				<a  href="{% url 'profile_section' person.id %}?section=vitals">Demographics</a>
+			<li class="list-group-item">
 				{% if contacts %}
+				<a  href="{% url 'update_demographic' demographic.id %}">Demographics</a>
 				<br />
 				{{ demographic.gender }}<br />
 				{{ demographic.date_of_birth }} <br />
 				{{ demographic.marital_status }}
+				{% else %}
+				<a  href="{% url 'create_demographic' person.id %}">Demographics</a>
 				{% endif %}
 			</li>
 			<li class="list-group-item">				
-				<a  href="{% url 'profile_section' person.id %}?section=vitals">Contact Information</a>
 				{% if contacts %}
+				<a  href="{% url 'update_contact' contacts.id %}">Contact Information</a>
 				<br />
 				{{ contacts.telephone }}<br />
 				{{ contacts.mailing_address }}<br />
 				{{ contacts.residence }}
+				{% else %}
+				<a  href="{% url 'create_contact' person.id %}">Contact Information</a>
 				{% endif %}
 			</li>
 			<li class="list-group-item">				
-				<a  href="{% url 'profile_section' person.id %}?section=vitals">Guardian/Next of Kin</a>
 				{% if contacts %}
+				<a  href="{% url 'update_guardian' nextofkin.id %}">Guardian/Next of Kin</a>
 				<br />			
 				{{ nextofkin.father_name }}<br />
 				{{ nextofin.mother_name }}
 				{{ nextofin.guardian_occupation }}
+				{% else %}
+				<a  href="{% url 'create_guardian' person.id %}">Guardian/Next of Kin</a>
 				{% endif %}
 			</li>
 		</div>

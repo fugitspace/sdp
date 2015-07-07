@@ -15,7 +15,7 @@ from django.utils.decorators import method_decorator
 
 from person.models import Person, PersonVitals, PersonContacts, PersonDemographic, PersonGuardian
 
-from person.forms import PersonForm
+from person.forms import PersonForm, PersonVitalsForm, PersonDemographicForm, PersonContactForm, PersonNextofKinForm
 
 # Create your views here.
 class LoginRequiredMixin(object):
@@ -32,8 +32,7 @@ class IndexView(ListView):
     context_object_name = 'person_list'
     
 class PersonMixin(object):
-    fields = ('first_name', 'surname', 'home_village', 'person_photo')
-
+    
     @property
     def success_msg(self):
         return NotImplemented
@@ -44,13 +43,15 @@ class PersonMixin(object):
 
     
 class PersonCreateView(PersonMixin, CreateView):
+    fields = ('first_name', 'surname', 'home_village', 'person_photo')
     model = Person    
     success_msg = 'Person successfully added!'
     success_url = '/patient/'
     template_name = 'person/create_person.html'
     
     
-class PersonUpdateView(PersonMixin, UpdateView):    
+class PersonUpdateView(PersonMixin, UpdateView):
+    fields = ('first_name', 'surname', 'home_village', 'person_photo')
     template_name = 'person/update_person.html'
     model = Person
     context_object_name = 'person'
@@ -70,14 +71,86 @@ class PersonDetailView(ListView):
     def get_context_data(self, **kwargs):
         context = super(PersonDetailView, self).get_context_data(**kwargs)
         context['person'] = self.object
-        try:
-            context['demographic'] = PersonDemographic.objects.get(person = self.object)
-            context['vitals'] = PersonVitals.objects.get(person = self.object)
-            context['contacts'] = PersonContacts.objects.get(person = self.object)
-            context['nextofkin'] = PersonGuardian.objects.get(person = self.object)
-        except:
-            pass
-        
+        models = {
+                'demographic':PersonDemographic,
+                'vitals':PersonVitals,
+                'contacts':PersonContacts,
+                'nextofkin':PersonGuardian
+            }
+        for key, model in models.items():
+            person_object = ''
+            try:
+                print(model)
+                person_object = model.objects.get(person = self.object)
+                print("The name is {}".format(person_object.id))
+            except:
+                pass
+            if person_object:
+                context[key] = person_object
         return context
 
+
+class ProfileMixin(object):
+    template = ''
+    form = None
+    
+    def get(self, request, **kwargs):
+        personObj = Person.objects.get(pk = kwargs['pk'])
+        form = self.form()
+        return render(request, self.template, {"person":personObj, "form":form})
+
+    def post(self, request, **kwargs):
+        form = self.form(request.POST)
+        personObj = Person.objects.get(pk = kwargs['pk'])        
+        if form.is_valid():        
+            initial_form_save = form.save(commit=False)
+            initial_form_save.person = personObj
+            initial_form_save.user = request.user
+            initial_form_save.save()
+            return redirect('/patient/{}/profile/'.format(kwargs['pk']))
+        else:
+            return render(request, self.template, {"person":personObj, "form":form})
+        
+class PersonVitalsCreate(ProfileMixin, View):    
+    template = 'person/vitals_create.html'
+    form = PersonVitalsForm
+
+    
+class PersonVitalsUpdate(PersonMixin, UpdateView):
+    fields = ('body_temperature', 'blood_pressure', 'weight')    
     model = PersonVitals
+    template_name = 'person/vitals_update.html'
+    success_url = '/patient/'
+
+    
+class PersonContactsCreate(ProfileMixin, View):
+    form = PersonContactForm
+    template = 'person/contacts_create.html'
+
+    
+class PersonContactsUpdate(PersonMixin, UpdateView):
+    fields = ('telephone', 'mailing_address', 'residence')    
+    model = PersonContacts
+    template_name = 'person/contacts_update.html'
+
+    
+class PersonDemographicCreate(ProfileMixin, View):
+    form = PersonDemographicForm
+    template = 'person/demographic_create.html'
+
+    
+class PersonDemographicUpdate(PersonMixin, UpdateView):
+    fields = ('gender', 'date_of_birth', 'marital_status')
+    model = PersonDemographic
+    template_name = 'person/demographic_update.html'
+
+    
+class PersonGuardianCreate(ProfileMixin, View):
+    form = PersonNextofKinForm    
+    template = 'person/guardian_create.html'
+    
+
+class PersonGuardianUpdate(PersonMixin, UpdateView):
+    fields = ('father_name', 'mother_name', 'guardian_occupation')
+    model = PersonGuardian
+    template_name = 'person/guardian_update.html'
