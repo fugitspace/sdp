@@ -1,13 +1,17 @@
 {% extends 'base.html' %}
-
+{% load bootstrap3 %}
 {% block title %}
 SDP::Create Person
 {% endblock title %}
 
 {% block content %}
-<form class="form-horizontal" method="POST" action="{% url 'create_person' %}">
+<form class="form-horizontal" enctype="multipart/form-data" method="POST" action="{% url 'create_person' %}">
 	{% csrf_token %}
-	{{ form.as_p }}
-	<input type="submit" value="Create" />
+	{% bootstrap_form form %}
+	{% buttons %}
+	<button type="submit" class="btn btn-primary">
+		Submit
+	</button>
+	{% endbuttons %}
 </form>
 {% endblock content %}

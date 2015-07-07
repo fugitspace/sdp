@@ -13,7 +13,9 @@ from django.views.generic.detail import SingleObjectMixin
 from django.utils.decorators import method_decorator
 
 
-from person.models import Person
+from person.models import Person, PersonVitals, PersonContacts, PersonDemographic, PersonGuardian
+
+from person.forms import PersonForm
 
 # Create your views here.
 class LoginRequiredMixin(object):
@@ -25,15 +27,20 @@ class LoginRequiredMixin(object):
     
 class IndexView(ListView):
     model = Person
+    form_class = PersonForm
     template_name = 'person/index.html'
     context_object_name = 'person_list'
     
 class PersonMixin(object):
-    fields = ('first_name', 'surname', 'residence')
+    fields = ('first_name', 'surname', 'home_village', 'person_photo')
 
     @property
     def success_msg(self):
         return NotImplemented
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super(PersonMixin, self).form_valid(form)
 
     
 class PersonCreateView(PersonMixin, CreateView):
@@ -45,3 +52,36 @@ class PersonCreateView(PersonMixin, CreateView):
     
 class PersonUpdateView(TemplateView):    
     template_name = 'person/update_person.html'
+
+    def post(self, request, *args, **kwargs):
+        person_form = PersonForm(request.POST, request.FILES, instance = self.get_object())
+        if person_form.is_valid():
+            person_form.save()
+            message.add_message(request,
+                                messages.SUCCESS, 'Person Record Updated')            
+
+
+class PersonDetailView(ListView):
+    template_name = 'person/profile.html'
+
+    def get(self, request, *args, **kwargs):
+        self.object = get_object_or_404(Person, pk = kwargs['pk'])
+        return super(PersonDetailView, self).get(request, *args, **kwargs)
+    
+    def get_queryset(self):
+        return self.object
+
+    def get_context_data(self, **kwargs):
+        context = super(PersonDetailView, self).get_context_data(**kwargs)
+        context['person'] = self.object
+        try:
+            context['demographic'] = PersonDemographic.objects.get(person = self.object)
+            context['vitals'] = PersonVitals.objects.get(person = self.object)
+            context['contacts'] = PersonContacts.objects.get(person = self.object)
+            context['nextofkin'] = PersonGuardian.objects.get(person = self.object)
+        except:
+            pass
+        
+        return context
+
+    model = PersonVitals

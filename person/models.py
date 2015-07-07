@@ -36,10 +36,10 @@ class Person(CreateUpdate):
     surname = models.CharField(max_length=255, verbose_name="Surname")
     othername = models.CharField(max_length=255, blank=True, verbose_name="Othername")
     home_village = models.CharField(max_length=255, blank = True, verbose_name="Home Village")
-    person_photo = models.FilePathField(blank=True, verbose_name = "Passport Photo")
+    person_photo = models.ImageField(upload_to = 'person_photos', null=True, blank=True, verbose_name = "Passport Photo")
 
     class Meta:
-        ordering = ['first_name', 'surname']
+        ordering = ['-updated', 'surname']
         verbose_name_plural = "persons"
 
     def __str__(self):

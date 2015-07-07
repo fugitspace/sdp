@@ -5,14 +5,26 @@ SDP::Home Page Here. Just fool around
 {% endblock title %}
 
 {% block content %}
-<p>Home content goes here please</p>
-<ul>
-	{% for person in person_list %}
-	<li>{{ person.first_name }} <span>{{ person.surname }}</span>
-		<br />{{ person.home_village }}
-	</li>
-	
-	{% endfor %}
-</ul>
-
+<div class="panel panel-default">
+	<div class="panel-heading">Patients List</div>
+	<div class="panel-body">
+		<p>Recent visits come first</p>
+	</div>
+	<table class="table table-hover">
+		<tr>
+			<th>Surname</th><th>First name, Othername</th><th>Home Village</th><th>Options</td>
+		</tr>
+		{% for person in person_list %}
+		<tr>
+			<td>{{ person.surname }}</td>
+			<td>{{ person.first_name }}</td>
+			<td>{{ person.home_village }}</td>
+			<td>
+				<a href="{% url 'update_person' person.id %}">Edit</a>
+				<a href="{% url 'person_profile' person.id %}">Profile</a>
+			</td>
+		</tr>	
+		{% endfor %}
+	</table>
+</div>
 {% endblock content %}
