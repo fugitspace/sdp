@@ -25,7 +25,7 @@ SDP :: Sauver Du Papier
 				
 			</li>
 			<li class="list-group-item">
-				{% if contacts %}
+				{% if demographic %}
 				<a  href="{% url 'update_demographic' demographic.id %}">Demographics</a>
 				<br />
 				{{ demographic.gender }}<br />
@@ -47,12 +47,12 @@ SDP :: Sauver Du Papier
 				{% endif %}
 			</li>
 			<li class="list-group-item">				
-				{% if contacts %}
+				{% if nextofkin %}
 				<a  href="{% url 'update_guardian' nextofkin.id %}">Guardian/Next of Kin</a>
 				<br />			
 				{{ nextofkin.father_name }}<br />
-				{{ nextofin.mother_name }}
-				{{ nextofin.guardian_occupation }}
+				{{ nextofkin.mother_name }}<br />
+				{{ nextofkin.guardian_occupation }}
 				{% else %}
 				<a  href="{% url 'create_guardian' person.id %}">Guardian/Next of Kin</a>
 				{% endif %}
