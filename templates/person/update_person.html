@@ -1,9 +1,19 @@
 {% extends 'base.html' %}
 
+{% load bootstrap3 %}
+
 {% block title %}
 SDP::Updating a personal record here
 {% endblock title %}
 
 {% block content %}
-<p>We are updating this person now. Can you try it?</p>
+<form class="form-horizontal" enctype="multipart/form-data" method="POST" action="{% url 'update_person' person.id %}">
+	{% csrf_token %}
+	{% bootstrap_form form %}
+	{% buttons %}
+	<button type="submit" class="btn btn-primary">
+		Submit
+	</button>
+	{% endbuttons %}
+</form>
 {% endblock content %}

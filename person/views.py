@@ -50,17 +50,13 @@ class PersonCreateView(PersonMixin, CreateView):
     template_name = 'person/create_person.html'
     
     
-class PersonUpdateView(TemplateView):    
+class PersonUpdateView(PersonMixin, UpdateView):    
     template_name = 'person/update_person.html'
+    model = Person
+    context_object_name = 'person'
+    success_url = '/patient/'
 
-    def post(self, request, *args, **kwargs):
-        person_form = PersonForm(request.POST, request.FILES, instance = self.get_object())
-        if person_form.is_valid():
-            person_form.save()
-            message.add_message(request,
-                                messages.SUCCESS, 'Person Record Updated')            
-
-
+    
 class PersonDetailView(ListView):
     template_name = 'person/profile.html'
 
