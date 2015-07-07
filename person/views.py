@@ -132,7 +132,8 @@ class PersonContactsUpdate(PersonMixin, UpdateView):
     fields = ('telephone', 'mailing_address', 'residence')    
     model = PersonContacts
     template_name = 'person/contacts_update.html'
-
+    success_url = '/patient/'
+    
     
 class PersonDemographicCreate(ProfileMixin, View):
     form = PersonDemographicForm
@@ -143,7 +144,8 @@ class PersonDemographicUpdate(PersonMixin, UpdateView):
     fields = ('gender', 'date_of_birth', 'marital_status')
     model = PersonDemographic
     template_name = 'person/demographic_update.html'
-
+    success_url = '/patient/'
+    
     
 class PersonGuardianCreate(ProfileMixin, View):
     form = PersonNextofKinForm    
@@ -154,3 +156,4 @@ class PersonGuardianUpdate(PersonMixin, UpdateView):
     fields = ('father_name', 'mother_name', 'guardian_occupation')
     model = PersonGuardian
     template_name = 'person/guardian_update.html'
+    success_url = '/patient/'
