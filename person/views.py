@@ -72,8 +72,8 @@ class PersonDetailView(ListView):
         context = super(PersonDetailView, self).get_context_data(**kwargs)
         context['person'] = self.object
         models = {
-                'demographic':PersonDemographic,
                 'vitals':PersonVitals,
+                'demographic':PersonDemographic,                
                 'contacts':PersonContacts,
                 'nextofkin':PersonGuardian
             }
